@@ -1,5 +1,8 @@
-const screen = document.querySelector('ul');
+const books = document.querySelector('.books');
 let library = [];
+const add = document.querySelector('.add');
+
+add.addEventListener('click', () => {});
 
 function Book(title, author, pages, read) {
   this.title = title;
@@ -8,13 +11,39 @@ function Book(title, author, pages, read) {
   this.read = read;
 }
 
-Book.prototype.info = function () {
-  const book = document.createElement('li');
-  book.textContent = `Title: ${this.title}\nAuthor: ${this.author}\nNumber of pages: ${this.pages}\nRead: ${this.read}`;
-  screen.appendChild(book);
+Book.prototype.createCard = function () {
+  const card = {};
+  const container = document.createElement('div');
+  card.edit = document.createElement('i');
+  card.title = document.createElement('h1');
+  card.author = document.createElement('p');
+  card.pages = document.createElement('p');
+  card.read = document.createElement('button');
+
+  card.read.addEventListener('click', () => {
+    card.read.classList.toggle('read');
+    card.read.classList.toggle('not-read');
+    if (card.read.classList.contains('read')) {
+      card.read.textContent = 'Read';
+    } else card.read.textContent = 'Not Read';
+  });
+
+  container.classList.add('card');
+  card.edit.classList.add('edit');
+  card.read.classList.add('btn');
+  card.title.textContent = this.title;
+  card.author.textContent = `Author: ${this.author}`;
+  card.pages.textContent = `Pages: ${this.pages}`;
+
+  if (this.read) {
+    card.read.classList.add('read');
+    card.read.textContent = 'Read';
+  } else {
+    card.read.classList.add('not-read');
+    card.read.textContent = 'Not Read';
+  }
+
+  Object.values(card).forEach((value) => {
+    container.appendChild(value);
+  });
 };
-
-function addBookToLibrary() {}
-
-const example = new Book('Percy Jackson', 'Rick Riordan', 300, 'Yes');
-example.info();
