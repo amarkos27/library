@@ -9,6 +9,33 @@
     <title>Library</title>
 </head>
 <body>
+    <div class="modal-overlay">
+        <div class="hide-modal">
+            <form class="new-item">
+                <h1>New Book</h1>
+                <div class="input-container">
+                    <label for="title">Title:</label>
+                    <input type="text" name="title" id="title" autocomplete="off" required>
+                </div>
+                <div class="input-container">
+                    <label for="author">Author:</label>
+                    <input type="text" name="author" id="author" autocomplete="off" required>
+                </div>
+                <div class="input-container">
+                    <label for="pages">Pages:</label>
+                    <input type="number" name="pages" id="pages" autocomplete="off" required>
+                </div>
+                <div class="input-container">
+                    <label>Have you read it?</label>
+                    <label class="check-wrapper">
+                        <input type="checkbox" name="complete" id="check-wrapper">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <button class="read btn" id="sub" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
     <div class="library">
         <header>
             <h1>Library</h1>
@@ -17,7 +44,7 @@
             <div class="logo">
                 <?xml version="1.0" encoding="iso-8859-1"?>
                 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
-                <svg fill="#fff" height="75px" width="75" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+                <svg fill="#fff" height="75px" width="75" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                     viewBox="0 0 512 512" xml:space="preserve">
                 <g>
                     <g>
@@ -29,16 +56,10 @@
                 </g>
                 </svg>
             </div>
-            <button class="btn">Add New</button>
+            <button class="btn add">Add New</button>
         </div>
         <div class="main">
             <div class="books">
-                <div class="card">
-                    <h1>Title</h1>
-                    <p class="author">Author</p>
-                    <p class="pages">Pages</p>
-                    <button class="read btn">Read</button>
-                </div>
             </div>
         </div>
     </div>
