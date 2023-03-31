@@ -74,6 +74,8 @@ Book.prototype.createCard = function () {
   Object.values(card).forEach((value) => {
     container.appendChild(value);
   });
+
+  books.appendChild(container);
 };
 
 const checkValid = (...args) => {
@@ -103,7 +105,7 @@ const validateForm = (...args) => {
 
 const submitBook = (title, author, pages, read) => {
   const newBook = new Book(title.value, author.value, pages.value, read.checked);
-  newBook.createCard();
+  library.push(newBook);
 };
 
 submit.addEventListener('click', (e) => {
@@ -112,13 +114,13 @@ submit.addEventListener('click', (e) => {
   const title = document.querySelector('#title');
   const author = document.querySelector('#author');
   const pages = document.querySelector('#pages');
-  const read = document.querySelector('#complete');
+  const read = document.querySelector('#check-wrapper');
 
   const formValid = checkValid(title, author, pages);
   if (formValid) {
-    closeModal(e);
     submitBook(title, author, pages, read);
-    modal.childNodes[1].reset();
+    closeModal(e);
+    library[library.length - 1].createCard();
   } else {
     validateForm(title, author, pages);
   }

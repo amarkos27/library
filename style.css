@@ -25,9 +25,10 @@
     font-style: italic;
     font-display: swap;
 }
+
 /* * * * * * */
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -35,13 +36,13 @@
 }
 
 body,
-:root{
+:root {
     font-family: "Rubik", Arial, Helvetica, sans-serif;
     min-width: 100vw;
     min-height: 100vh;
 }
 
-:root{
+:root {
     --sidebar: #455d7a;
     --header: #233142;
     --main: #e3e3e3;
@@ -49,7 +50,7 @@ body,
 }
 
 /* MODAL */
-.modal-overlay{
+.modal-overlay {
     position: fixed;
     left: 0;
     top: 0;
@@ -64,7 +65,7 @@ body,
     z-index: 1;
 }
 
-.modal{
+.modal {
     width: 300px;
     background-color: #fdfdfd;
     height: 400px;
@@ -73,40 +74,42 @@ body,
     animation: show 0.2s;
 }
 
-.show{
+.show {
     opacity: 1;
     pointer-events: auto;
 }
 
-@keyframes show{
-    from{
+@keyframes show {
+    from {
         opacity: 0;
         transform: scale(0);
     }
-    to{
+
+    to {
         opacity: 1;
         transform: scale(1);
     }
 }
 
-.hide-modal{
+.hide-modal {
     opacity: 0;
     animation: hide .25s;
 }
 
-@keyframes hide{
-    from{
+@keyframes hide {
+    from {
         opacity: 1;
         transform: scale(1);
     }
-    to{
+
+    to {
         opacity: 0;
         transform: scale(0.5);
     }
 }
 
 /* MODAL FORM */
-.new-item{
+.new-item {
     display: grid;
     justify-items: center;
     grid-auto-rows: 1fr;
@@ -115,19 +118,19 @@ body,
     gap: 10px;
 }
 
-.new-item .input-container{
+.new-item .input-container {
     width: 80%;
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.new-item label{
+.new-item label {
     width: fit-content;
 }
 
-input[type = 'text'],
-input[type = 'number']{
+input[type='text'],
+input[type='number'] {
     padding: 5px;
     height: 25px;
     width: 100%;
@@ -138,25 +141,25 @@ input[type = 'number']{
 }
 
 .invalid:invalid,
-.invalid:invalid{
+.invalid:invalid {
     border-color: red;
 }
 
-input[type = 'text']:focus,
-#pages:focus{
+input[type='text']:focus,
+#pages:focus {
     border-color: blue;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
 /* CHECKMARK */
-.check-wrapper{
+.check-wrapper {
     position: relative;
     cursor: pointer;
     display: block;
     width: fit-content;
 }
 
-#complete{
+#complete {
     width: fit-content;
     position: absolute;
     opacity: 0;
@@ -165,7 +168,7 @@ input[type = 'text']:focus,
     width: 0;
 }
 
-.checkmark{
+.checkmark {
     position: absolute;
     top: 0;
     left: 0;
@@ -175,25 +178,25 @@ input[type = 'text']:focus,
     border-radius: 5px;
 }
 
-.check-wrapper:hover .checkmark{
+.check-wrapper:hover .checkmark {
     background-color: #ccc;
 }
 
-.check-wrapper input:checked ~ .checkmark{
+.check-wrapper input:checked~.checkmark {
     background-color: #f95959;
 }
 
-.checkmark::after{
+.checkmark::after {
     content: "";
     position: absolute;
     display: none;
 }
 
-.check-wrapper input:checked ~ .checkmark::after{
+.check-wrapper input:checked~.checkmark::after {
     display: block;
 }
 
-.checkmark::after{
+.checkmark::after {
     left: 9px;
     top: 5px;
     width: 5px;
@@ -205,15 +208,20 @@ input[type = 'text']:focus,
     transform: rotate(45deg);
 }
 
+/* MODAL BUTTON */
+.modal .btn.read {
+    align-self: end;
+}
+
 /* LAYOUT STRUCTURE */
-.library{
+.library {
     display: grid;
     grid: "sidebar header" 1fr "sidebar main" 7fr / 1fr 7fr;
     height: 100vh;
 }
 
 /* HEADER */
-.library header{
+.library header {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -224,12 +232,12 @@ input[type = 'text']:focus,
     color: var(--text-color);
 }
 
-header h1{
+header h1 {
     font-weight: 400;
 }
 
 /* SIDEBAR */
-.library .sidebar{
+.library .sidebar {
     position: relative;
     grid-area: sidebar;
     background-color: var(--sidebar);
@@ -241,7 +249,7 @@ header h1{
     gap: 10vh;
 }
 
-.btn{
+.btn {
     flex: 0;
     appearance: none;
     padding: 15px 50px;
@@ -254,13 +262,13 @@ header h1{
     transition: 0.15s;
 }
 
-.btn:active{
+.btn:active {
     box-shadow: none;
     transform: scale(0.98);
 }
 
 /* MAIN */
-.library .main{
+.library .main {
     grid-area: main;
     background-color: var(--main);
     display: flex;
@@ -269,7 +277,7 @@ header h1{
     padding: 10px;
 }
 
-.books{
+.books {
     background-color: var(--header);
     padding: 20px;
     width: 90%;
@@ -284,7 +292,7 @@ header h1{
 }
 
 /* CARD */
-.books .card{
+.books .card {
     position: relative;
     font-size: 1rem;
     padding: 50px 20px 20px;
@@ -299,21 +307,21 @@ header h1{
 }
 
 .card h1,
-p{
+p {
     flex: 1;
     text-align: center;
 }
 
-.card h1{
+.card h1 {
     font-size: 1.5em;
 }
 
-.card p{
+.card p {
     font-size: 1.2em;
     padding-top: 20px;
 }
 
-.edit{
+.edit {
     background: center / contain no-repeat url("./images/edit.svg");
     width: 25px;
     height: 25px;
@@ -324,23 +332,22 @@ p{
     transition: 0.1s;
 }
 
-.edit:active{
+.edit:active {
     transform: scale(0.9);
 }
 
-.card .btn{
+.card .btn {
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
-.card .btn:active{
+.card .btn:active {
     box-shadow: none;
 }
 
-.btn.read{
+.btn.read {
     background-color: #12C939;
-    align-self: end;
 }
 
-.btn.not-read{
+.btn.not-read {
     background-color: red;
 }
