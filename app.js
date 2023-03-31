@@ -1,105 +1,35 @@
 const books = document.querySelector('.books');
-let library = [];
+const library = [];
 const add = document.querySelector('.add');
+const overlay = document.querySelector('.modal-overlay');
+const modal = document.querySelector('.hide-modal');
+const submit = document.querySelector('#sub');
 
-// overlay.addEventListener('click', () => {
-//   overlay.style.zIndex = '0';
-//   overlay.style.opacity = '0';
-//   newBook.classList.remove('modal');
-//   newBook.classList.add('hide-modal');
-// });
-
-const createModal = () => {
-  const body = document.querySelector('body');
-  const libraryNode = document.querySelector('.library');
-
-  const overlay = document.createElement('div');
-  overlay.classList.add('modal-overlay');
-
-  const modal = document.createElement('div');
-  modal.classList.add('modal');
-
-  const createInputs = () => {
-    let inputs = new Array(3);
-
-    for (let i = 0; i < inputs.length; i++) {
-      const input = {};
-      const div = document.createElement('div');
-      const label = document.createElement('label');
-      const field = document.createElement('input');
-
-      if (i < 2) field.setAttribute('type', 'text');
-      else field.setAttribute('type', 'number');
-
-      div.appendChild(label);
-      div.appendChild(field);
-
-      input.div = div;
-      input.label = label;
-      input.field = field;
-
-      inputs[i] = input;
-    }
-
-    inputs[0].label.textContent = 'Title:';
-    inputs[0].label.setAttribute('for', 'title');
-    inputs[0].field.setAttribute('id', 'title');
-
-    inputs[1].label.textContent = 'Author:';
-    inputs[1].label.setAttribute('for', 'author');
-    inputs[1].field.setAttribute('id', 'author');
-
-    inputs[2].label.textContent = 'Pages:';
-    inputs[2].label.setAttribute('for', 'pages');
-    inputs[2].field.setAttribute('id', 'pages');
-
-    return inputs;
-  };
-
-  createInputs();
-
-  const fillModal = () => {
-    const form = document.createElement('form');
-    const header = document.createElement('h1');
-    const inputs = createInputs();
-    const button = document.createElement('button');
-
-    header.textContent = 'New Book';
-    button.textContent = 'Read';
-
-    form.classList.add('new-item');
-    button.classList.add('read', 'btn');
-
-    form.appendChild(header);
-    inputs.forEach((input) => {
-      form.appendChild(input.div);
-    });
-    form.appendChild(button);
-
-    modal.appendChild(form);
-    overlay.appendChild(modal);
-  };
-
-  fillModal();
-  body.insertBefore(overlay, libraryNode);
+const closeModal = (e) => {
+  if (
+    e.target.classList.contains('modal-overlay')
+    || e.target.classList.contains('btn')
+  ) {
+    modal.classList.add('hide-modal');
+    modal.childNodes[1].reset(); // Reset form when modal is closed
+    setTimeout(() => {
+      overlay.classList.remove('show');
+    }, 250);
+  }
 };
 
-const destroyModal = () => document.querySelector('.modal-overlay').remove();
-
-const overlayListener = () => {
-  const overlay = document.querySelector('.modal-overlay');
-  const modal = document.querySelector('.modal');
-
-  overlay.addEventListener('click', () => {
-    modal.classList.remove('modal');
-    modal.classList.add('hide-modal');
-    setTimeout(destroyModal, 200);
-  });
+const openModal = () => {
+  overlay.classList.add('show');
+  modal.classList.remove('hide-modal');
+  modal.classList.add('modal');
 };
 
 add.addEventListener('click', () => {
-  createModal();
-  overlayListener();
+  openModal();
+});
+
+overlay.addEventListener('click', (e) => {
+  closeModal(e);
 });
 
 function Book(title, author, pages, read) {
@@ -145,3 +75,51 @@ Book.prototype.createCard = function () {
     container.appendChild(value);
   });
 };
+
+const checkValid = (...args) => {
+  let valid = true;
+  const inputs = [...args];
+
+  inputs.forEach((input) => {
+    if (!input.checkValidity()) {
+      valid = false;
+    } else {
+      input.classList.remove('invalid');
+    }
+  });
+
+  return valid;
+};
+
+const validateForm = (...args) => {
+  const inputs = [...args];
+  inputs.forEach((input) => {
+    if (!input.checkValidity()) {
+      input.classList.add('invalid');
+      input.reportValidity();
+    }
+  });
+};
+
+const submitBook = (title, author, pages, read) => {
+  const newBook = new Book(title.value, author.value, pages.value, read.checked);
+  newBook.createCard();
+};
+
+submit.addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  const title = document.querySelector('#title');
+  const author = document.querySelector('#author');
+  const pages = document.querySelector('#pages');
+  const read = document.querySelector('#complete');
+
+  const formValid = checkValid(title, author, pages);
+  if (formValid) {
+    closeModal(e);
+    submitBook(title, author, pages, read);
+    modal.childNodes[1].reset();
+  } else {
+    validateForm(title, author, pages);
+  }
+});
