@@ -42,7 +42,7 @@ function Book(title, author, pages, read) {
 Book.prototype.createCard = function () {
   const card = {};
   const container = document.createElement('div');
-  card.edit = document.createElement('i');
+  card.remove = document.createElement('i');
   card.title = document.createElement('h1');
   card.author = document.createElement('p');
   card.pages = document.createElement('p');
@@ -53,15 +53,25 @@ Book.prototype.createCard = function () {
     card.read.classList.toggle('not-read');
     if (card.read.classList.contains('read')) {
       card.read.textContent = 'Read';
-    } else card.read.textContent = 'Not Read';
+      this.read = true;
+    } else {
+      card.read.textContent = 'Not Read';
+      this.read = false;
+    }
+  });
+
+  card.remove.addEventListener('click', () => {
+    books.removeChild(container);
+    const index = library.indexOf(this);
+    library.splice(index, 1);
   });
 
   container.classList.add('card');
-  card.edit.classList.add('edit');
+  card.remove.classList.add('remove');
   card.read.classList.add('btn');
   card.title.textContent = this.title;
-  card.author.textContent = `Author: ${this.author}`;
-  card.pages.textContent = `Pages: ${this.pages}`;
+  card.author.textContent = `Author:\n${this.author}`;
+  card.pages.textContent = `Pages:\n${this.pages}`;
 
   if (this.read) {
     card.read.classList.add('read');

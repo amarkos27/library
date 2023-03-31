@@ -308,21 +308,24 @@ header h1 {
 
 .card h1,
 p {
-    flex: 1;
     text-align: center;
 }
 
 .card h1 {
-    font-size: 1.5em;
+    flex: 0;
+    font-size: 2em;
 }
 
 .card p {
-    font-size: 1.2em;
+    flex: 1;
+    font-size: 1.3em;
     padding-top: 20px;
+    line-height: 2em;
+    white-space: pre;
 }
 
-.edit {
-    background: center / contain no-repeat url("./images/edit.svg");
+.remove {
+    background: center / contain no-repeat url("./images/remove.svg");
     width: 25px;
     height: 25px;
     cursor: pointer;
@@ -332,7 +335,7 @@ p {
     transition: 0.1s;
 }
 
-.edit:active {
+.remove:active {
     transform: scale(0.9);
 }
 
