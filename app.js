@@ -7,8 +7,8 @@ const submit = document.querySelector('#sub');
 
 const closeModal = (e) => {
   if (
-    e.target.classList.contains('modal-overlay')
-    || e.target.classList.contains('btn')
+    e.target.classList.contains('modal-overlay') ||
+    e.target.classList.contains('btn')
   ) {
     modal.classList.add('hide-modal');
     modal.childNodes[1].reset(); // Reset form when modal is closed
@@ -114,7 +114,12 @@ const validateForm = (...args) => {
 };
 
 const submitBook = (title, author, pages, read) => {
-  const newBook = new Book(title.value, author.value, pages.value, read.checked);
+  const newBook = new Book(
+    title.value,
+    author.value,
+    pages.value,
+    read.checked
+  );
   library.push(newBook);
 };
 
@@ -124,7 +129,7 @@ submit.addEventListener('click', (e) => {
   const title = document.querySelector('#title');
   const author = document.querySelector('#author');
   const pages = document.querySelector('#pages');
-  const read = document.querySelector('#check-wrapper');
+  const read = document.querySelector('#complete');
 
   const formValid = checkValid(title, author, pages);
   if (formValid) {
