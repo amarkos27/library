@@ -5,13 +5,20 @@ const overlay = document.querySelector('.modal-overlay');
 const modal = document.querySelector('.hide-modal');
 const submit = document.querySelector('#sub');
 
+const resetModal = () => {
+  const form = modal.childNodes[1];
+  const inputs = modal.querySelectorAll('input');
+  form.reset();
+  inputs.forEach((input) => input.classList.remove('invalid'));
+};
+
 const closeModal = (e) => {
   if (
     e.target.classList.contains('modal-overlay') ||
     e.target.classList.contains('btn')
   ) {
     modal.classList.add('hide-modal');
-    modal.childNodes[1].reset(); // Reset form when modal is closed
+    resetModal(); // Reset form when modal is closed
     setTimeout(() => {
       overlay.classList.remove('show');
     }, 250);
