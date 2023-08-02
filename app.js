@@ -1,28 +1,80 @@
 const books = document.querySelector('.books');
 const library = [];
 const add = document.querySelector('.add');
-const overlay = document.querySelector('.modal-overlay');
 const modal = document.querySelector('.hide-modal');
-const submit = document.querySelector('#sub');
+const overlay = document.querySelector('.modal-overlay');
+const inputs = Array.from(modal.querySelectorAll('input'));
+const submit = modal.querySelector('.btn');
 
-const resetModal = () => {
-  const form = modal.childNodes[1];
-  const inputs = modal.querySelectorAll('input');
-  form.reset();
-  inputs.forEach((input) => input.classList.remove('invalid'));
+const card = () => {
+  const container = document.createElement('div');
+  const remove = document.createElement('i');
+  const title = document.createElement('h1');
+  const author = document.createElement('p');
+  const pages = document.createElement('p');
+  const read = document.createElement('button');
+
+  container.classList.add('card');
+  remove.classList.add('remove');
+  read.classList.add('btn');
+
+  return { container, remove, title, author, pages, read };
 };
 
-const closeModal = (e) => {
-  if (
-    e.target.classList.contains('modal-overlay') ||
-    e.target.classList.contains('btn')
-  ) {
-    modal.classList.add('hide-modal');
-    resetModal(); // Reset form when modal is closed
-    setTimeout(() => {
-      overlay.classList.remove('show');
-    }, 250);
+const book = (title, author, pages, read) => {
+  const newBook = { title, author, pages, read };
+  const newCard = card();
+  const fields = Object.values(newCard).slice(1);
+
+  newCard.remove.addEventListener('click', () => {
+    books.removeChild(newCard.container);
+
+    const index = library.indexOf(newBook);
+    library.splice(index, 1);
+  });
+
+  // Changes the read value on the card and in the stored array
+  newCard.read.addEventListener('click', () => {
+    const index = library.indexOf(newBook);
+
+    if (newCard.read.textContent === 'Read') {
+      newCard.read.classList.remove('read');
+      newCard.read.classList.add('not-read');
+      newCard.read.textContent = 'Not Read';
+      library[index].read = false;
+    } else {
+      newCard.read.classList.remove('not-read');
+      newCard.read.classList.add('read');
+      newCard.read.textContent = 'Read';
+      library[index].read = true;
+    }
+  });
+
+  // Initial setting of the fields on the card
+  newCard.title.textContent = title;
+  newCard.author.textContent = `Author:\n${author}`;
+  newCard.pages.textContent = `Pages:\n${pages}`;
+  //
+  if (read) {
+    newCard.read.classList.add('read');
+    newCard.read.textContent = 'Read';
+  } else {
+    newCard.read.classList.add('not-read');
+    newCard.read.textContent = 'Not Read';
   }
+
+  fields.forEach((field) => newCard.container.appendChild(field));
+  return { newBook, newCard };
+};
+
+// Modal interaction
+modal.addEventListener('click', (e) => {
+  e.stopPropagation();
+});
+
+const resetForm = () => {
+  const form = modal.querySelector('form');
+  form.reset();
 };
 
 const openModal = () => {
@@ -31,119 +83,42 @@ const openModal = () => {
   modal.classList.add('modal');
 };
 
-add.addEventListener('click', () => {
-  openModal();
-});
-
-overlay.addEventListener('click', (e) => {
-  closeModal(e);
-});
-
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
-}
-
-Book.prototype.createCard = function () {
-  const card = {};
-  const container = document.createElement('div');
-  card.remove = document.createElement('i');
-  card.title = document.createElement('h1');
-  card.author = document.createElement('p');
-  card.pages = document.createElement('p');
-  card.read = document.createElement('button');
-
-  card.read.addEventListener('click', () => {
-    card.read.classList.toggle('read');
-    card.read.classList.toggle('not-read');
-    if (card.read.classList.contains('read')) {
-      card.read.textContent = 'Read';
-      this.read = true;
-    } else {
-      card.read.textContent = 'Not Read';
-      this.read = false;
-    }
-  });
-
-  card.remove.addEventListener('click', () => {
-    books.removeChild(container);
-    const index = library.indexOf(this);
-    library.splice(index, 1);
-  });
-
-  container.classList.add('card');
-  card.remove.classList.add('remove');
-  card.read.classList.add('btn');
-  card.title.textContent = this.title;
-  card.author.textContent = `Author:\n${this.author}`;
-  card.pages.textContent = `Pages:\n${this.pages}`;
-
-  if (this.read) {
-    card.read.classList.add('read');
-    card.read.textContent = 'Read';
-  } else {
-    card.read.classList.add('not-read');
-    card.read.textContent = 'Not Read';
-  }
-
-  Object.values(card).forEach((value) => {
-    container.appendChild(value);
-  });
-
-  books.appendChild(container);
+const closeModal = () => {
+  modal.classList.add('hide-modal');
+  inputs.forEach((input) => input.classList.remove('invalid'));
+  resetForm();
+  setTimeout(() => {
+    overlay.classList.remove('show');
+  }, 250);
 };
 
-const checkValid = (...args) => {
+const submitBook = (e) => {
+  e.preventDefault();
   let valid = true;
-  const inputs = [...args];
 
-  inputs.forEach((input) => {
-    if (!input.checkValidity()) {
-      valid = false;
-    } else {
-      input.classList.remove('invalid');
-    }
-  });
-
-  return valid;
-};
-
-const validateForm = (...args) => {
-  const inputs = [...args];
   inputs.forEach((input) => {
     if (!input.checkValidity()) {
       input.classList.add('invalid');
       input.reportValidity();
+      valid = false;
     }
   });
-};
 
-const submitBook = (title, author, pages, read) => {
-  const newBook = new Book(
-    title.value,
-    author.value,
-    pages.value,
-    read.checked
-  );
-  library.push(newBook);
-};
-
-submit.addEventListener('click', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  const title = document.querySelector('#title');
-  const author = document.querySelector('#author');
-  const pages = document.querySelector('#pages');
-  const read = document.querySelector('#complete');
-
-  const formValid = checkValid(title, author, pages);
-  if (formValid) {
-    submitBook(title, author, pages, read);
-    closeModal(e);
-    library[library.length - 1].createCard();
-  } else {
-    validateForm(title, author, pages);
+  if (valid) {
+    const entry = book(
+      inputs[0].value,
+      inputs[1].value,
+      inputs[2].value,
+      inputs[3].checked
+    );
+    library.push(entry.newBook);
+    books.appendChild(entry.newCard.container);
+    closeModal();
   }
+};
+
+add.addEventListener('click', openModal);
+overlay.addEventListener('click', closeModal);
+submit.addEventListener('click', (e) => {
+  submitBook(e);
 });
