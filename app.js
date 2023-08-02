@@ -33,6 +33,7 @@ const book = (title, author, pages, read) => {
     library.splice(index, 1);
   });
 
+  // Changes the read value on the card and in the stored array
   newCard.read.addEventListener('click', () => {
     const index = library.indexOf(newBook);
 
@@ -49,9 +50,11 @@ const book = (title, author, pages, read) => {
     }
   });
 
+  // Initial setting of the fields on the card
   newCard.title.textContent = title;
   newCard.author.textContent = `Author:\n${author}`;
   newCard.pages.textContent = `Pages:\n${pages}`;
+  //
   if (read) {
     newCard.read.classList.add('read');
     newCard.read.textContent = 'Read';
