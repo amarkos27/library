@@ -1,16 +1,10 @@
-const add = document.querySelector('.add');
-const modal = document.querySelector('.hide-modal');
-const overlay = document.querySelector('.modal-overlay');
-const inputs = Array.from(modal.querySelectorAll('input'));
-const submit = modal.querySelector('.btn');
-
 const Library = (() => {
   const books = document.querySelector('.books');
   const library = [];
 
   const append = (container, entry) => {
     books.appendChild(container);
-    library.push(entry.newBook);
+    library.push(entry);
   };
 
   const remove = (container, entry) => {
@@ -18,7 +12,11 @@ const Library = (() => {
     library.splice(library.indexOf(entry), 1);
   };
 
-  return { append, remove };
+  const update = (needsUpdate, updated) => {
+    library.splice(library.indexOf(needsUpdate), 1, updated);
+  };
+
+  return { append, remove, update };
 })();
 class Card {
   #container = document.createElement('div');
@@ -75,8 +73,12 @@ class Card {
     });
 
     this.#wasRead.addEventListener('click', () => {
+      const needsUpdate = this.#input;
+
       this.#input.wasRead = !this.#input.wasRead;
       this.#setUpReadBtn();
+
+      Library.update(needsUpdate, this.#input);
     });
   }
 
@@ -96,8 +98,8 @@ class Card {
     pieces.forEach((piece) => this.#container.appendChild(piece));
   }
 
-  submit(newBook) {
-    Library.append(this.#container, newBook);
+  attach(entry) {
+    Library.append(this.#container, entry);
   }
 
   constructor(entry) {
@@ -111,63 +113,72 @@ const newEntry = (title, author, pages, wasRead) => {
   newCard.constructCard();
 
   const submit = () => {
-    newCard.submit(newBook);
+    newCard.attach(newBook);
   };
 
   return { newBook, newCard, submit };
 };
 
 // Modal interaction
-modal.addEventListener('click', (e) => {
-  e.stopPropagation();
-});
+// eslint-disable-next-line no-unused-vars
+const Modal = (() => {
+  const add = document.querySelector('.add');
+  const modal = document.querySelector('.hide-modal');
+  const overlay = document.querySelector('.modal-overlay');
+  const inputs = Array.from(modal.querySelectorAll('input'));
+  const submit = modal.querySelector('.btn');
 
-const resetForm = () => {
-  const form = modal.querySelector('form');
-  form.reset();
-};
-
-const openModal = () => {
-  overlay.classList.add('show');
-  modal.classList.remove('hide-modal');
-  modal.classList.add('modal');
-};
-
-const closeModal = () => {
-  modal.classList.add('hide-modal');
-  inputs.forEach((input) => input.classList.remove('invalid'));
-  resetForm();
-  setTimeout(() => {
-    overlay.classList.remove('show');
-  }, 250);
-};
-
-const submitBook = (e) => {
-  e.preventDefault();
-  let valid = true;
-
-  inputs.forEach((input) => {
-    if (!input.checkValidity()) {
-      input.classList.add('invalid');
-      input.reportValidity();
-      valid = false;
-    }
+  modal.addEventListener('click', (e) => {
+    e.stopPropagation();
   });
 
-  if (valid) {
-    const entry = newEntry(
-      inputs[0].value,
-      inputs[1].value,
-      inputs[2].value,
-      inputs[3].checked
-    );
-    entry.submit();
-    closeModal();
-  }
-};
+  const resetForm = () => {
+    const form = modal.querySelector('form');
+    form.reset();
+  };
 
-add.addEventListener('click', openModal);
-overlay.addEventListener('click', closeModal);
-submit.addEventListener('click', (e) => {
-  submitBook(e);
-});
+  const openModal = () => {
+    overlay.classList.add('show');
+    modal.classList.remove('hide-modal');
+    modal.classList.add('modal');
+  };
+
+  const closeModal = () => {
+    modal.classList.add('hide-modal');
+    inputs.forEach((input) => input.classList.remove('invalid'));
+    resetForm();
+    setTimeout(() => {
+      overlay.classList.remove('show');
+    }, 250);
+  };
+
+  const submitBook = (e) => {
+    e.preventDefault();
+    let valid = true;
+
+    inputs.forEach((input) => {
+      if (!input.checkValidity()) {
+        input.classList.add('invalid');
+        input.reportValidity();
+        valid = false;
+      }
+    });
+
+    if (valid) {
+      const entry = newEntry(
+        inputs[0].value,
+        inputs[1].value,
+        inputs[2].value,
+        inputs[3].checked
+      );
+      entry.submit();
+      closeModal();
+    }
+  };
+
+  add.addEventListener('click', openModal);
+  overlay.addEventListener('click', closeModal);
+  submit.addEventListener('click', (e) => {
+    submitBook(e);
+  });
+})();
