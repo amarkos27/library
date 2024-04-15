@@ -18,6 +18,7 @@ const Library = (() => {
 
   return { append, remove, update };
 })();
+
 class Card {
   #container = document.createElement('div');
 
